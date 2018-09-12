@@ -41,4 +41,12 @@ export class Towns {
         });
     }
 
+    public getTownByProvinceAndCode(province: string, code: string) {
+
+        return this.townsList.find(town =>
+            (town.province === province) && (town.code === code) && (!town.isHospital)
+        );
+
+    }
+
 }

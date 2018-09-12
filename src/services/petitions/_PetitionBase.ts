@@ -13,11 +13,17 @@ export abstract class PetitionBase {
             url: route,
             qs: data,
             resolveWithFullResponse: true,
+            qsStringifyOptions: { encode: false },
             timeout: this.timeout,
         })
             .then((response: Response) => {
                 if (response.statusCode === 200) {
-                    return this.processXml(response.body);
+                    if (response.headers['content-type'] === 'text/xml; charset=utf-8') {
+                        return this.processXml(response.body);
+                    } else {
+                        return Promise.resolve(response.body);
+                    }
+
                 } else {
                     return Promise.reject('ERROR');
                 }

@@ -39,3 +39,19 @@ export type VehiclePosition = {
     vehicle: string,
     busServer: string
 };
+
+export type Street = {
+    id: string,
+    name: string
+};
+
+export type Parada = {
+    id: string,
+    code: string,
+    town: Town,
+    denomination: string,
+    street?: Street
+    zone?: number,
+    xCoord?: number,
+    yCoord?: number,
+};

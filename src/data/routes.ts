@@ -1,5 +1,6 @@
 const baseRoute = 'http://apli.bizkaia.net/APPS/DANOK/TQWS/TQ.ASMX/';
 const dataRoute = 'http://apli.bizkaia.net/APPS/DANOK/TQ/DATOS_PARADAS/';
+const transportRoute = 'http://arcgis.bizkaia.net/arcgis/rest/services/TRANSPORTESURBANISMO/';
 
 export const ROUTES = {
     getTowns: baseRoute + 'gfReturn_Consultar_FamiliasCentros',
@@ -8,6 +9,9 @@ export const ROUTES = {
     getHorario: baseRoute + 'GetHorario',
     getVehiculos: baseRoute + 'GetVehiculos',
     lineasMunicipio: baseRoute + 'gfReturn_LineasMunicipio',
+    itinerariosLinea: baseRoute + 'gfReturn_Buscar_ItinerariosLinea',
 
-    pdf: dataRoute + 'ITINERARIOS/'
+    pdf: dataRoute + 'ITINERARIOS/',
+
+    getParadasTown: transportRoute + 'TQ_Bizkaibus_Mobile/MapServer/0/query'
 };

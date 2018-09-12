@@ -1,6 +1,6 @@
 import { Petitions } from './services/Petitions';
 import { Towns } from './services/Towns';
-import { Line } from 'data/models';
+import { Line, Town, Route } from 'data/models';
 
 export class BizkaibusService {
 
@@ -8,16 +8,24 @@ export class BizkaibusService {
     private towns: Towns;
 
     constructor() {
-        this.petitions = new Petitions();
         this.towns = new Towns();
-    }
-
-    public getTowns() {
-        return this.towns.getTowns();
+        this.petitions = new Petitions(this.towns);
     }
 
     public async updateTowns() {
         return this.towns.updateTowns();
+    }
+
+    public getFromTo(originTown: string, destinationTown: string): Promise<Line[]> {
+
+        const origin: Town = this.towns.getTownByName(originTown);
+        const destination: Town = this.towns.getTownByName(destinationTown);
+
+        if (!origin && !destination) {
+            return Promise.reject('NO_TOWN');
+        } else {
+            return this.petitions.estoyEnVoyA.petition(origin, destination);
+        }
     }
 
     public getHorario(line: string | Line, date?: Date) {
@@ -26,6 +34,20 @@ export class BizkaibusService {
 
     public getPdf(line: string | Line, direction?: 'I' | 'V') {
         return this.petitions.pdf.petition(line, direction);
+    }
+
+    public getItinerario(linea: Line, route: Route) {
+        return this.petitions.itinerariosLinea.petition(linea, route);
+    }
+
+    public getParadasTown(town: string) {
+        const searchTown: Town = this.towns.getTownByName(town);
+
+        if (!searchTown) {
+            return Promise.reject('NO_TOWN');
+        } else {
+            return this.petitions.getParadasTown.petition(searchTown);
+        }
     }
 
 }
