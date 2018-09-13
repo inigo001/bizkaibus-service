@@ -1,15 +1,35 @@
-import { Petitions } from './services/Petitions';
 import { Towns } from './services/Towns';
 import { Line, Town, Route } from 'data/models';
 
-export class BizkaibusService {
+import {
+    EstoyEnVoyA,
+    GetHorario,
+    GetVehiculos,
+    Pdf,
+    ItinerariosLinea,
+    GetParadasTown
+} from './services/petitions/index';
 
-    private petitions: Petitions;
+export default class BizkaibusService {
+
     private towns: Towns;
+
+    public horario: GetHorario;
+    public estoyEnVoyA: EstoyEnVoyA;
+    public vehiculos: GetVehiculos;
+    public pdf: Pdf;
+    public itinerariosLinea: ItinerariosLinea;
+    public paradasTown: GetParadasTown;
 
     constructor() {
         this.towns = new Towns();
-        this.petitions = new Petitions(this.towns);
+
+        this.horario = new GetHorario();
+        this.estoyEnVoyA = new EstoyEnVoyA();
+        this.vehiculos = new GetVehiculos();
+        this.pdf = new Pdf();
+        this.paradasTown = new GetParadasTown();
+        this.itinerariosLinea = new ItinerariosLinea(this.towns);
     }
 
     public async updateTowns() {
@@ -24,29 +44,29 @@ export class BizkaibusService {
         if (!origin && !destination) {
             return Promise.reject('NO_TOWN');
         } else {
-            return this.petitions.estoyEnVoyA.petition(origin, destination);
+            return this.estoyEnVoyA.petition(origin, destination);
         }
     }
 
     public getHorario(line: string | Line, date?: Date) {
-        return this.petitions.getHorario.petition(line, date);
+        return this.horario.petition(line, date);
     }
 
     public getPdf(line: string | Line, direction?: 'I' | 'V') {
-        return this.petitions.pdf.petition(line, direction);
+        return this.pdf.petition(line, direction);
     }
 
     public getItinerario(linea: Line, route: Route) {
-        return this.petitions.itinerariosLinea.petition(linea, route);
+        return this.itinerariosLinea.petition(linea, route);
     }
 
-    public getParadasTown(town: string) {
+    public async getParadasTown(town: string) {
         const searchTown: Town = this.towns.getTownByName(town);
 
         if (!searchTown) {
             return Promise.reject('NO_TOWN');
         } else {
-            return this.petitions.getParadasTown.petition(searchTown);
+            return this.paradasTown.petition(searchTown);
         }
     }
 

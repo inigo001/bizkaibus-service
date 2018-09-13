@@ -39,10 +39,7 @@ type PetitionResponse = {
 export class GetParadasTown extends PetitionBase {
 
     public petition(town: Town) {
-
         const whereQuery = `PROVINCIA+%3D${town.province}+%20AND+%20MUNICIPIO+%3D${town.code}`;
-
-        console.log(whereQuery);
 
         const data = {
             text: '',
