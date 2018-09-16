@@ -10,6 +10,8 @@ export const ROUTES = {
     getVehiculos: baseRoute + 'GetVehiculos',
     lineasMunicipio: baseRoute + 'gfReturn_LineasMunicipio',
     itinerariosLinea: baseRoute + 'gfReturn_Buscar_ItinerariosLinea',
+    getPasoParada: baseRoute + 'GetPasoParada',
+    getPasoParadaMobile: baseRoute + 'GetPasoParadaMobile',
 
     pdf: dataRoute + 'ITINERARIOS/',
 

@@ -65,8 +65,7 @@ export class GetParadasTown extends PetitionBase {
     }
 
     private processData(response: any, town: Town) {
-
-        const data: PetitionResponse = JSON.parse(response);
+        const data: PetitionResponse = response;
 
         const paradas: Parada[] = [];
 

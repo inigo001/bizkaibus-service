@@ -5,3 +5,4 @@ export { GetVehiculos } from './GetVehiculos';
 export { Pdf } from './Pdf';
 export { ItinerariosLinea } from './ItinerariosLinea';
 export { GetParadasTown } from './GetParadasTown';
+export { GetPasoParada } from './GetPasoParada';

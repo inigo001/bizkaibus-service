@@ -1,5 +1,5 @@
 import { Towns } from './services/Towns';
-import { Line, Town, Route } from 'data/models';
+import { Line, Town, Route, Parada, PasoTime, Horario } from 'data/models';
 
 import {
     EstoyEnVoyA,
@@ -7,7 +7,8 @@ import {
     GetVehiculos,
     Pdf,
     ItinerariosLinea,
-    GetParadasTown
+    GetParadasTown,
+    GetPasoParada
 } from './services/petitions/index';
 
 export default class BizkaibusService {
@@ -20,6 +21,7 @@ export default class BizkaibusService {
     public pdf: Pdf;
     public itinerariosLinea: ItinerariosLinea;
     public paradasTown: GetParadasTown;
+    public pasoParada: GetPasoParada;
 
     constructor() {
         this.towns = new Towns();
@@ -29,6 +31,7 @@ export default class BizkaibusService {
         this.vehiculos = new GetVehiculos();
         this.pdf = new Pdf();
         this.paradasTown = new GetParadasTown();
+        this.pasoParada = new GetPasoParada();
         this.itinerariosLinea = new ItinerariosLinea(this.towns);
     }
 
@@ -36,7 +39,7 @@ export default class BizkaibusService {
         return this.towns.updateTowns();
     }
 
-    public getFromTo(originTown: string, destinationTown: string): Promise<Line[]> {
+    public async getFromTo(originTown: string, destinationTown: string): Promise<Line[]> {
 
         const origin: Town = this.towns.getTownByName(originTown);
         const destination: Town = this.towns.getTownByName(destinationTown);
@@ -48,19 +51,19 @@ export default class BizkaibusService {
         }
     }
 
-    public getHorario(line: string | Line, date?: Date) {
+    public async getHorario(line: string | Line, date?: Date): Promise<Horario> {
         return this.horario.petition(line, date);
     }
 
-    public getPdf(line: string | Line, direction?: 'I' | 'V') {
+    public async getPdf(line: string | Line, direction?: 'I' | 'V') {
         return this.pdf.petition(line, direction);
     }
 
-    public getItinerario(linea: Line, route: Route) {
+    public async getItinerario(linea: Line, route: Route): Promise<Parada[]> {
         return this.itinerariosLinea.petition(linea, route);
     }
 
-    public async getParadasTown(town: string) {
+    public async getParadasTown(town: string): Promise<Parada[]> {
         const searchTown: Town = this.towns.getTownByName(town);
 
         if (!searchTown) {
@@ -68,6 +71,10 @@ export default class BizkaibusService {
         } else {
             return this.paradasTown.petition(searchTown);
         }
+    }
+
+    public async getPasoParada(parada: Parada): Promise<PasoTime[]> {
+        return this.pasoParada.petition(parada);
     }
 
 }

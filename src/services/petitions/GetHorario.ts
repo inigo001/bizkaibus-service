@@ -1,6 +1,6 @@
 import { PetitionBase } from './_PetitionBase';
 import { ROUTES } from '../../data/routes';
-import { Line, RouteTime } from 'data/models';
+import { Line, RouteTime, Route, Horario } from 'data/models';
 
 type PetitionResponse = {
     HT_TEXTOI: string,
@@ -38,7 +38,7 @@ export class GetHorario extends PetitionBase {
 
     private processData(registros: any) {
 
-        let horario;
+        let horario: Horario;
 
         for (const res of registros) {
             const response: PetitionResponse = res['$'];
@@ -52,11 +52,11 @@ export class GetHorario extends PetitionBase {
         return horario;
     }
 
-    private formatTimetable(idaText: string) {
+    private formatTimetable(idaText: string): RouteTime[] {
 
         const textArray: string[] = idaText.split('{vbNewLine}{vbNewLine}');
 
-        const routeTypes = [];
+        const routeTypes: RouteTime[] = [];
         let routeType: RouteTime = {
             salida: '',
             notas: [],

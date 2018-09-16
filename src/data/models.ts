@@ -26,9 +26,14 @@ export type Line = {
 };
 
 export type RouteTime = {
-    salida: string
-    notas: string[]
+    salida: string,
+    notas: string[],
     horarios: string[]
+};
+
+export type Horario = {
+    ida: RouteTime[],
+    vuelta: RouteTime[]
 };
 
 export type VehiclePosition = {
@@ -53,5 +58,15 @@ export type Parada = {
     street?: Street
     zone?: number,
     xCoord?: number,
-    yCoord?: number,
+    yCoord?: number
+};
+
+export type PasoTime = {
+    lineCode: string,
+    route: string,
+    times: Array<{
+        destination: string,
+        meters: number,
+        minutes: number
+    }>
 };

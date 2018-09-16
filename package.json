@@ -7,29 +7,34 @@
     "build": "rm -rf dist && npx tsc",
     "pretest": "npm run build",
     "test": "npx mocha",
-    "start": "npx tsc && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./dist/main.js"
+    "start": "npx tsc && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./dist/main.js",
+    "trials": "npx tsc && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./trials/test.js "
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "bizkaibus",
     "autobus",
-    "api"
+    "api",
+    "bizkaia"
   ],
   "author": "inigo001",
   "license": "ISC",
   "dependencies": {
-    "full-icu": "^1.2.1",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "xml2js": "^0.4.19"
   },
   "engines": {
-    "node": "~9.11.0"
+    "node": "~10.8.0"
   },
   "devDependencies": {
     "@types/node": "^10.3.3",
     "@types/request": "^2.47.1",
     "@types/request-promise-native": "^1.0.15",
     "@types/xml2js": "^0.4.3",
+    "full-icu": "^1.2.1",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "source-map-support": "^0.5.6",
