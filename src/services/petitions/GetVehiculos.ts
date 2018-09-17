@@ -39,8 +39,8 @@ export class GetVehiculos extends PetitionBase {
 
             const vehiclePosition: VehiclePosition = {
                 vehicle: vehiculo.vehiculo[0],
-                xCoord: vehiculo.xcoord[0],
-                yCoord: vehiculo.ycoord[0],
+                xCoord: parseFloat(vehiculo.xcoord[0]),
+                yCoord: parseFloat(vehiculo.ycoord[0]),
                 line: vehiculo.linea[0],
                 subLine: vehiculo.sublinea[0],
                 busServer: vehiculo.serv_bus[0]

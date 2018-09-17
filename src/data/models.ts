@@ -37,8 +37,8 @@ export type Horario = {
 };
 
 export type VehiclePosition = {
-    xCoord: string,
-    yCoord: string,
+    xCoord: number,
+    yCoord: number,
     line: string,
     subLine: string,
     vehicle: string,

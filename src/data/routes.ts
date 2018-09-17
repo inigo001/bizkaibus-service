@@ -9,6 +9,7 @@ export const ROUTES = {
     getHorario: baseRoute + 'GetHorario',
     getVehiculos: baseRoute + 'GetVehiculos',
     lineasMunicipio: baseRoute + 'gfReturn_LineasMunicipio',
+    lineasWeb: baseRoute + 'gfReturn_LineasLineaWEB',
     itinerariosLinea: baseRoute + 'gfReturn_Buscar_ItinerariosLinea',
     getPasoParada: baseRoute + 'GetPasoParada',
     getPasoParadaMobile: baseRoute + 'GetPasoParadaMobile',

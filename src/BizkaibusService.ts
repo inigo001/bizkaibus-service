@@ -1,5 +1,5 @@
 import { Towns } from './services/Towns';
-import { Line, Town, Route, Parada, PasoTime, Horario } from 'data/models';
+import { Line, Town, Route, Parada, PasoTime, Horario, VehiclePosition } from 'data/models';
 
 import {
     EstoyEnVoyA,
@@ -8,7 +8,8 @@ import {
     Pdf,
     ItinerariosLinea,
     GetParadasTown,
-    GetPasoParada
+    GetPasoParada,
+    GetInfoLineas
 } from './services/petitions/index';
 
 export default class BizkaibusService {
@@ -22,6 +23,7 @@ export default class BizkaibusService {
     public itinerariosLinea: ItinerariosLinea;
     public paradasTown: GetParadasTown;
     public pasoParada: GetPasoParada;
+    public getInfoLineas: GetInfoLineas;
 
     constructor() {
         this.towns = new Towns();
@@ -33,6 +35,7 @@ export default class BizkaibusService {
         this.paradasTown = new GetParadasTown();
         this.pasoParada = new GetPasoParada();
         this.itinerariosLinea = new ItinerariosLinea(this.towns);
+        this.getInfoLineas = new GetInfoLineas();
     }
 
     public async updateTowns() {
@@ -59,6 +62,16 @@ export default class BizkaibusService {
         return this.pdf.petition(line, direction);
     }
 
+    /**
+     * getItinerario
+     * Devuelve un listado de paradas por las que pasa el autobús, dependiente
+     * de la ruta seleccionada
+     *
+     * @param {Line} linea
+     * @param {Route} route
+     * @returns {Promise<Parada[]>}
+     * @memberof BizkaibusService
+     */
     public async getItinerario(linea: Line, route: Route): Promise<Parada[]> {
         return this.itinerariosLinea.petition(linea, route);
     }
@@ -75,6 +88,14 @@ export default class BizkaibusService {
 
     public async getPasoParada(parada: Parada): Promise<PasoTime[]> {
         return this.pasoParada.petition(parada);
+    }
+
+    public async getLineInfo(line: string): Promise<Line> {
+        return this.getInfoLineas.petition(line);
+    }
+
+    public async getVehicles(line: string | Line): Promise<VehiclePosition[]> {
+        return this.vehiculos.petition(line);
     }
 
 }
