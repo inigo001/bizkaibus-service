@@ -1,6 +1,6 @@
-import { Town } from '../../data/models';
+import { Town } from '@data/models';
 import { PetitionBase } from './_PetitionBase';
-import { ROUTES } from '../../data/routes';
+import { ROUTES } from '@data/routes';
 
 type PetitionResponse = {
     CodigoGrupo: string

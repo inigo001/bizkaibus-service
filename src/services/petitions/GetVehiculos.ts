@@ -1,5 +1,5 @@
 import { PetitionBase } from './_PetitionBase';
-import { ROUTES } from '../../data/routes';
+import { ROUTES } from '@data/routes';
 import { Line, VehiclePosition } from 'data/models';
 
 type PetitionResponse = {

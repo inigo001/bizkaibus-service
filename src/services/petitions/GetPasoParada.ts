@@ -1,6 +1,6 @@
 import { PetitionBase } from './_PetitionBase';
-import { Parada, PasoTime } from '../../data/models';
-import { ROUTES } from '../../data/routes';
+import { Parada, PasoTime } from '@data/models';
+import { ROUTES } from '@data/routes';
 
 type PetitionResponse = {
     linea: string[],

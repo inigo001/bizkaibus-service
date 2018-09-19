@@ -25,6 +25,11 @@ export default class BizkaibusService {
     public pasoParada: GetPasoParada;
     public getInfoLineas: GetInfoLineas;
 
+    /**
+     * Crea una instancia de BizkaibusService
+     * @constructor
+     * @memberof BizkaibusService
+     */
     constructor() {
         this.towns = new Towns();
 
@@ -38,10 +43,20 @@ export default class BizkaibusService {
         this.getInfoLineas = new GetInfoLineas();
     }
 
+    /**
+     * @returns
+     * @memberof BizkaibusService
+     */
     public async updateTowns() {
         return this.towns.updateTowns();
     }
 
+    /**
+     * @param {string} originTown
+     * @param {string} destinationTown
+     * @returns {Promise<Line[]>}
+     * @memberof BizkaibusService
+     */
     public async getFromTo(originTown: string, destinationTown: string): Promise<Line[]> {
 
         const origin: Town = this.towns.getTownByName(originTown);
@@ -54,19 +69,29 @@ export default class BizkaibusService {
         }
     }
 
+    /**
+     * @param {(string | Line)} line
+     * @param {Date} [date]
+     * @returns {Promise<Horario>}
+     * @memberof BizkaibusService
+     */
     public async getHorario(line: string | Line, date?: Date): Promise<Horario> {
         return this.horario.petition(line, date);
     }
 
+    /**
+     * @method getPdf
+     * @param {(string | Line)} line
+     * @param {('I' | 'V')} [direction]
+     * @returns
+     * @memberof BizkaibusService
+     */
     public async getPdf(line: string | Line, direction?: 'I' | 'V') {
         return this.pdf.petition(line, direction);
     }
 
     /**
-     * getItinerario
-     * Devuelve un listado de paradas por las que pasa el autobús, dependiente
-     * de la ruta seleccionada
-     *
+     * Obtiene un listado de paradas a partir de una línea y una ruta determinadas
      * @param {Line} linea
      * @param {Route} route
      * @returns {Promise<Parada[]>}
@@ -76,6 +101,12 @@ export default class BizkaibusService {
         return this.itinerariosLinea.petition(linea, route);
     }
 
+    /**
+     * Obtiene un listado de paradas del pueblo seleccionado
+     * @param {string} town
+     * @returns {Promise<Parada[]>}
+     * @memberof BizkaibusService
+     */
     public async getParadasTown(town: string): Promise<Parada[]> {
         const searchTown: Town = this.towns.getTownByName(town);
 
@@ -86,14 +117,29 @@ export default class BizkaibusService {
         }
     }
 
+    /**
+     * @param {Parada} parada
+     * @returns {Promise<PasoTime[]>}
+     * @memberof BizkaibusService
+     */
     public async getPasoParada(parada: Parada): Promise<PasoTime[]> {
         return this.pasoParada.petition(parada);
     }
 
+    /**
+     * @param {string} line
+     * @returns {Promise<Line>}
+     * @memberof BizkaibusService
+     */
     public async getLineInfo(line: string): Promise<Line> {
         return this.getInfoLineas.petition(line);
     }
 
+    /**
+     * @param {(string | Line)} line
+     * @returns {Promise<VehiclePosition[]>}
+     * @memberof BizkaibusService
+     */
     public async getVehicles(line: string | Line): Promise<VehiclePosition[]> {
         return this.vehiculos.petition(line);
     }

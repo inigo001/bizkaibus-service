@@ -1,8 +1,8 @@
 import * as request from 'request-promise-native';
 import { Response } from 'request';
 import { parseString } from 'xml2js';
-import { Line } from '../../data/models';
-import { ERROR } from '../../data/errors';
+import { Line } from '@data/models';
+import { ERROR } from '@data/errors';
 
 export abstract class PetitionBase {
 

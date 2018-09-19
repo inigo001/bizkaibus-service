@@ -1,6 +1,6 @@
 import { GetTowns } from './petitions/index';
-import { Town } from 'data/models';
-import { TOWNS } from '../data/towns';
+import { Town } from '@data/models';
+import { TOWNS } from '@data/towns';
 
 export class Towns {
 

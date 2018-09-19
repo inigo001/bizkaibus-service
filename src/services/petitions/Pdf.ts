@@ -2,8 +2,8 @@ import * as request from 'request-promise-native';
 import { Response } from 'request';
 
 import { PetitionBase } from './_PetitionBase';
-import { Line } from '../../data/models';
-import { ROUTES } from '../../data/routes';
+import { Line } from '@data/models';
+import { ROUTES } from '@data/routes';
 
 export class Pdf extends PetitionBase {
 

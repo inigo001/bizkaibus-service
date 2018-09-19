@@ -4,7 +4,16 @@
     "module": "umd",
     "outDir": "dist",
     "inlineSourceMap": true,
-    "baseUrl": "./src",
+    "baseUrl": "src",
+    "paths": {
+      "@data/*": ["data/*"],
+      "@services/*": ["services/*"],
+    },
+    "declaration": true,
+    "allowJs": false,
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "pretty": true,
   },
   "files": [
     "./node_modules/@types/node/index.d.ts"

@@ -4,11 +4,11 @@
   "description": "Pruebas con la API de Bizkaibus",
   "main": "dist/BizkaibusService.js",
   "scripts": {
-    "build": "rm -rf dist && npx tsc",
+    "build": "rm -rf dist && npx gulp build",
     "pretest": "npm run build",
     "test": "npx mocha",
-    "start": "npx tsc && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./dist/main.js",
-    "trials": "npx tsc && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./trials/test.js "
+    "start": "npm run build && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./dist/main.js",
+    "trials": "npm run build && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./trials/test.js "
   },
   "files": [
     "dist"
@@ -34,8 +34,12 @@
     "@types/request": "^2.47.1",
     "@types/request-promise-native": "^1.0.15",
     "@types/xml2js": "^0.4.3",
-    "full-icu": "^1.2.1",
     "chai": "^4.1.2",
+    "full-icu": "^1.2.1",
+    "gulp": "^4.0.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "gulp-typescript-path-resolver": "0.0.1-c",
     "mocha": "^5.2.0",
     "source-map-support": "^0.5.6",
     "tslint": "^5.11.0",

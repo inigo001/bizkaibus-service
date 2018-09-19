@@ -1,6 +1,6 @@
 import { PetitionBase } from './_PetitionBase';
-import { ROUTES } from '../../data/routes';
-import { Line, Route } from 'data/models';
+import { ROUTES } from '@data/routes';
+import { Line, Route } from '@data/models';
 
 type PetitionResponse = {
     LN_CLINEA: string,

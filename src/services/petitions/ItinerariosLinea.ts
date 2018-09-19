@@ -1,7 +1,7 @@
 import { PetitionBase } from './_PetitionBase';
-import { ROUTES } from '../../data/routes';
-import { Line, Route, Parada, Town, Street } from 'data/models';
-import { Towns } from '../Towns';
+import { ROUTES } from '@data/routes';
+import { Line, Route, Parada, Town, Street } from '@data/models';
+import { Towns } from '@services/Towns';
 
 type PetitionResponse = {
     IR_PROVIN: string,
