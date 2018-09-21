@@ -37,8 +37,7 @@ export type Horario = {
 };
 
 export type VehiclePosition = {
-    xCoord: number,
-    yCoord: number,
+    position: Position,
     line: string,
     subLine: string,
     vehicle: string,
@@ -57,8 +56,7 @@ export type Parada = {
     denomination: string,
     street?: Street
     zone?: number,
-    xCoord?: number,
-    yCoord?: number
+    position?: Position
 };
 
 export type PasoTime = {
@@ -69,4 +67,9 @@ export type PasoTime = {
         meters: number,
         minutes: number
     }>
+};
+
+export type Position = {
+    lat: number,
+    lon: number
 };

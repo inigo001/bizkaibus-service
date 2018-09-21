@@ -6,7 +6,7 @@ import { ERROR } from '@data/errors';
 
 export abstract class PetitionBase {
 
-    protected timeout: number = 20000;
+    protected TIMEOUT: number = 20000;
 
     protected sendRequest(route: string, data: object) {
 
@@ -15,7 +15,7 @@ export abstract class PetitionBase {
             qs: data,
             resolveWithFullResponse: true,
             qsStringifyOptions: { encode: false },
-            timeout: this.timeout,
+            timeout: this.TIMEOUT,
         })
             .then((response: Response) => {
                 if (response.statusCode === 200) {
@@ -69,12 +69,80 @@ export abstract class PetitionBase {
         return formattedLine;
     }
 
+    protected utmToLatLong(xCoord, yCoord) {
+        return this.utm2LL(xCoord, yCoord, 30);
+    }
+
+    // PRIVADAS
+
     private processXml(xml: string): Promise<any> {
         const data = (xml).replace(/([0-9]®)+/, '');
 
         return this.parseXml(data)
             .then(result => result)
             .catch(error => Promise.reject(error));
+    }
+
+    /**
+     * @license Apache-2.0
+     * {@link https://gist.github.com/attilaolah/6cf22de8949d45a6cc06286536050e42}
+     * @private
+     * @param {number} easting
+     * @param {number} northing
+     * @param {number} utmZone
+     * @returns
+     * @memberof PetitionBase
+     */
+    private utm2LL(easting: number, northing: number, utmZone: number) {
+        const DatumEqRad: number[] = [
+            6378137.0, 6378137.0, 6378137.0, 6378135.0, 6378160.0, 6378245.0, 6378206.4,
+            6378388.0, 6378388.0, 6378249.1, 6378206.4, 6377563.4, 6377397.2, 6377276.3
+        ];
+        const DatumFlat: number[] = [
+            298.2572236, 298.2572236, 298.2572215, 298.2597208, 298.2497323,
+            298.2997381, 294.9786982, 296.9993621, 296.9993621, 293.4660167,
+            294.9786982, 299.3247788, 299.1527052, 300.8021499
+        ];
+
+        // Constantes
+        const Item = 0;
+        const a = DatumEqRad[Item];
+        const f = 1 / DatumFlat[Item];
+        const drad = Math.PI / 180;
+        const k0 = 0.9996;
+        const b = a * (1 - f);
+        const e = Math.sqrt(1 - (b / a) * (b / a));
+        const esq = (1 - (b / a) * (b / a));
+        const e0sq = e * e / (1 - e * e);
+
+        // Calculos
+        const zcm = 3 + 6 * (utmZone - 1) - 180;
+        const e1 = (1 - Math.sqrt(1 - e * e)) / (1 + Math.sqrt(1 - e * e));
+        const M0 = 0;
+        const M = M0 + northing / k0;
+        const mu = M / (a * (1 - esq * (1 / 4 + esq * (3 / 64 + 5 * esq / 256))));
+
+        let phi1 =
+            mu + e1 * (3 / 2 - 27 * e1 * e1 / 32) * Math.sin(2 * mu) +
+            e1 * e1 * (21 / 16 - 55 * e1 * e1 / 32) * Math.sin(4 * mu);
+        phi1 = phi1 + e1 * e1 * e1 * (Math.sin(6 * mu) * 151 / 96 + e1 * Math.sin(8 * mu) * 1097 / 512);
+
+        const C1 = e0sq * Math.pow(Math.cos(phi1), 2);
+        const T1 = Math.pow(Math.tan(phi1), 2);
+        const N1 = a / Math.sqrt(1 - Math.pow(e * Math.sin(phi1), 2));
+        const R1 = N1 * (1 - e * e) / (1 - Math.pow(e * Math.sin(phi1), 2));
+        const D = (easting - 500000) / (N1 * k0);
+
+        let phi = (D * D) * (1 / 2 - D * D * (5 + 3 * T1 + 10 * C1 - 4 * C1 * C1 - 9 * e0sq) / 24);
+        phi = phi + Math.pow(D, 6) * (61 + 90 * T1 + 298 * C1 + 45 * T1 * T1 - 252 * e0sq - 3 * C1 * C1) / 720;
+        phi = phi1 - (N1 * Math.tan(phi1) / R1) * phi;
+
+        const lon =
+            D * (1 + D * D * ((-1 - 2 * T1 - C1) / 6 + D * D *
+                (5 - 2 * C1 + 28 * T1 - 3 * C1 * C1 + 8 * e0sq + 24 * T1 * T1) / 120))
+            / Math.cos(phi1);
+
+        return [(phi / drad), (zcm + lon / drad)];
     }
 
 }

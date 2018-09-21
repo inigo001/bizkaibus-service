@@ -32,15 +32,15 @@ export class GetVehiculos extends PetitionBase {
     private processData(response: any) {
 
         const vehiculos: PetitionResponse[] = response.Consulta.InfoVehiculo;
-
         const vehiclePositions: VehiclePosition[] = [];
 
         for (const vehiculo of vehiculos) {
 
+            const latLong = this.utmToLatLong(parseFloat(vehiculo.xcoord[0]), parseFloat(vehiculo.ycoord[0]));
+
             const vehiclePosition: VehiclePosition = {
                 vehicle: vehiculo.vehiculo[0],
-                xCoord: parseFloat(vehiculo.xcoord[0]),
-                yCoord: parseFloat(vehiculo.ycoord[0]),
+                position: { lat: latLong[0], lon: latLong[1] },
                 line: vehiculo.linea[0],
                 subLine: vehiculo.sublinea[0],
                 busServer: vehiculo.serv_bus[0]

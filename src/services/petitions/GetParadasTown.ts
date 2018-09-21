@@ -76,8 +76,7 @@ export class GetParadasTown extends PetitionBase {
                 code: feature.attributes.PR_CODRED,
                 town,
                 denomination: feature.attributes.DENOMINACION,
-                xCoord: feature.geometry.x,
-                yCoord: feature.geometry.y,
+                position: { lat: feature.geometry.y, lon: feature.geometry.x }
             };
 
             paradas.push(parada);
