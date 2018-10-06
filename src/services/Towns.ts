@@ -1,5 +1,5 @@
 import { GetTowns } from './petitions/index';
-import { Town } from '@data/models';
+import { Town, TownType } from '@data/models';
 import { TOWNS } from '@data/towns';
 
 export class Towns {
@@ -41,12 +41,18 @@ export class Towns {
         });
     }
 
-    public getTownByProvinceAndCode(province: string, code: string) {
+    public getTownByProvinceAndCode(province: string, code: string): Town {
 
         return this.townsList.find(town =>
-            (town.province === province) && (town.code === code) && (!town.isHospital)
+            (town.province === province) && // Pertenece a la provincia
+            (town.code === code) && // El código del pueblo
+            (town.townType === TownType.Common || town.townType === TownType.Outside) // Es un pueblo y no de otro tipo
         );
 
+    }
+
+    public getTownsByType(townType: TownType): Town[] {
+        return this.townsList.filter(town => town.townType = townType);
     }
 
 }

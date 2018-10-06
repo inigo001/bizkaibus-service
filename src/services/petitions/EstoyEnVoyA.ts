@@ -36,10 +36,13 @@ export class EstoyEnVoyA extends PetitionBase {
 
         return this.sendRequest(ROUTES.estoyEnVoyA, data)
             .then(response => this.parseXml(response.string['_']))
-            .then(response => this.processData(response.Consulta.Registro));
+            .then(response => this.processData(response.Registro));
     }
 
     private processData(registros: any[]) {
+        if (!registros) {
+            return [];
+        }
 
         const lines: Line[] = [];
 

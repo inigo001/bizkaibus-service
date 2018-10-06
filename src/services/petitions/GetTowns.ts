@@ -34,11 +34,11 @@ export class GetTowns extends PetitionBase {
                 const registryTown: PetitionResponse = listPart['$'];
 
                 const newTown: Town = {
-                    name: registryTown.label.replace(/\((.*?)\)/, ''),
+                    name: registryTown.label.replace(/\((.*?)\)/, '').trim(),
                     province: (registryTown.CodigoProvincia) ? registryTown.CodigoProvincia : '48',
                     code: (registryTown.CodigoMunicipio)
                         ? registryTown.CodigoMunicipio : this.padZeroes(registryTown.CodigoElemento),
-                    isHospital: (registryTown.CodigoGrupo === '2') ? true : false
+                    townType: parseInt(registryTown.CodigoGrupo, 10),
                 };
 
                 towns.push(newTown);

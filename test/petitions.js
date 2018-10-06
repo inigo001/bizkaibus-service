@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const BizkaibusService = require('../dist/BizkaibusService').default;
+const BizkaibusService = require('../dist/BizkaibusService');
 const TOWNS = require('../dist/data/towns').TOWNS;
 
 describe('Petitions', function () {
@@ -50,7 +50,7 @@ describe('Petitions', function () {
 
     let error;
 
-    it(`Return Horario for line A3911`, done => {
+    it(`Return Horario for line 3911`, done => {
 
       BBService.getHorario('3911')
         .then(result => expect(result).to.be.an('object'))
@@ -63,15 +63,42 @@ describe('Petitions', function () {
           }
         });
     });
-  });
+
+    it(`Return Horario for line A3632`, done => {
+
+      BBService.getHorario('A3632')
+        .then(result => expect(result).to.be.an('object'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });  });
 
   describe('GetInfoLineas', () => {
 
     let error;
 
-    it(`Return Info for line A3911`, done => {
+    it(`Return Info for line 3911`, done => {
 
       BBService.getLineInfo('3911')
+        .then(result => expect(result).to.be.an('object'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });
+
+    it(`Return Info for line A3632`, done => {
+
+      BBService.getLineInfo('3632')
         .then(result => expect(result).to.be.an('object'))
         .catch(err => error = err)
         .finally(() => {

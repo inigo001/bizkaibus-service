@@ -17,7 +17,8 @@ import {
     ItinerariosLinea,
     GetParadasTown,
     GetPasoParada,
-    GetInfoLineas
+    GetInfoLineas,
+    GetLineas
 } from './services/petitions/index';
 import { PetitionBase } from '@services/petitions/_PetitionBase';
 
@@ -30,19 +31,25 @@ type Services = {
     paradasTown: GetParadasTown,
     pasoParada: GetPasoParada,
     getInfoLineas: GetInfoLineas
+    getLineas: GetLineas
 };
 
-export default class BizkaibusService {
+type Options = {
+    method?: 'GET' | 'POST',
+    timeout?: number
+};
+
+class BizkaibusService {
 
     private towns: Towns;
     private services: Services;
 
     /**
-     * Crea una instancia de BizkaibusService
-     * @constructor
+     * Creates an instance of BizkaibusService.
+     * @param {Options} [options]
      * @memberof BizkaibusService
      */
-    constructor() {
+    constructor(options?: Options) {
         this.towns = new Towns();
 
         this.services = {
@@ -53,8 +60,14 @@ export default class BizkaibusService {
             paradasTown: new GetParadasTown(),
             pasoParada: new GetPasoParada(),
             itinerariosLinea: new ItinerariosLinea(this.towns),
-            getInfoLineas: new GetInfoLineas()
+            getInfoLineas: new GetInfoLineas(),
+            getLineas: new GetLineas(),
         };
+
+        if (options) {
+            this.changeTimeout(options.timeout);
+            this.changeMethod(options.method);
+        }
     }
 
     /**
@@ -68,9 +81,18 @@ export default class BizkaibusService {
     public async changeTimeout(timeout: number) {
         for (const key in this.services) {
             if (this.services[key]) {
-                this.services[key].updateTimeout(timeout);
+                (this.services[key] as PetitionBase).updateTimeout(timeout);
             }
         }
+    }
+
+    public async changeMethod(method: 'GET' | 'POST') {
+        for (const key in this.services) {
+            if (this.services[key]) {
+                (this.services[key] as PetitionBase).changeMethod(method);
+            }
+        }
+
     }
 
     /**
@@ -166,4 +188,14 @@ export default class BizkaibusService {
         return this.services.vehiculos.petition(line);
     }
 
+    /**
+     * @returns {Promise<Line[]>}
+     * @memberof BizkaibusService
+     */
+    public async getLines(): Promise<Line[]> {
+        return this.services.getLineas.petition();
+    }
+
 }
+
+export = BizkaibusService;

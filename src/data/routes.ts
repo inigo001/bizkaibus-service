@@ -13,6 +13,7 @@ export const ROUTES = {
     itinerariosLinea: baseRoute + 'gfReturn_Buscar_ItinerariosLinea',
     getPasoParada: baseRoute + 'GetPasoParada',
     getPasoParadaMobile: baseRoute + 'GetPasoParadaMobile',
+    getLineas: baseRoute + 'gfReturn_Consultar_TBBB_Itinerario',
 
     pdf: dataRoute + 'ITINERARIOS/',
 

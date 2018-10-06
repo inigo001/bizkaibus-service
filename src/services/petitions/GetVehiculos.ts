@@ -29,7 +29,11 @@ export class GetVehiculos extends PetitionBase {
             .then(response => this.processData(response));
     }
 
-    private processData(response: any) {
+    private processData(response: any): VehiclePosition[] {
+
+        if (!response) {
+            return [];
+        }
 
         const vehiculos: PetitionResponse[] = response.Consulta.InfoVehiculo;
         const vehiclePositions: VehiclePosition[] = [];

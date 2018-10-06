@@ -7,16 +7,23 @@ import { ERROR } from '@data/errors';
 export abstract class PetitionBase {
 
     protected timeout: number = 20000;
+    protected petitionMethod: 'GET' | 'POST' = 'GET';
+
+    public updateTimeout(timeout: number): void {
+        if (timeout) {
+            this.timeout = timeout;
+        }
+    }
+
+    public changeMethod(method: 'GET' | 'POST') {
+        if (method) {
+            this.petitionMethod = method;
+        }
+    }
 
     protected sendRequest(route: string, data: object): Promise<any> {
 
-        return request.get({
-            url: route,
-            qs: data,
-            resolveWithFullResponse: true,
-            qsStringifyOptions: { encode: false },
-            timeout: this.timeout,
-        })
+        return this.internalPetition(route, data)
             .then((response: Response) => {
                 if (response.statusCode === 200) {
                     if (response.headers['content-type'] === 'text/xml; charset=utf-8') {
@@ -33,6 +40,30 @@ export abstract class PetitionBase {
                     return Promise.reject(`${ERROR[1]} - ${response.url}`);
                 }
             });
+    }
+
+    private internalPetition(route, data) {
+
+        if (this.petitionMethod === 'GET') {
+
+            return request.get({
+                url: route,
+                qs: data,
+                resolveWithFullResponse: true,
+                qsStringifyOptions: { encode: false },
+                timeout: this.timeout,
+            });
+
+        } else {
+
+            return request.post({
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                resolveWithFullResponse: true,
+                url: route,
+                form: data
+            });
+
+        }
     }
 
     protected parseXml(xml: string): Promise<any> {
@@ -64,6 +95,8 @@ export abstract class PetitionBase {
             formattedLine = `A${line}`;
         } else if (typeof line === 'object') {
             formattedLine = line.code;
+        } else {
+            formattedLine = line;
         }
 
         return formattedLine;
@@ -71,10 +104,6 @@ export abstract class PetitionBase {
 
     protected utmToLatLong(xCoord: number, yCoord: number) {
         return this.utm2LL(xCoord, yCoord, 30);
-    }
-
-    public updateTimeout(timeout: number): void {
-        this.timeout = timeout;
     }
 
     // PRIVADAS

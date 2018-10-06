@@ -7,3 +7,4 @@ export { ItinerariosLinea } from './ItinerariosLinea';
 export { GetParadasTown } from './GetParadasTown';
 export { GetPasoParada } from './GetPasoParada';
 export { GetInfoLineas } from './GetInfoLineas';
+export { GetLineas } from './GetLineas';

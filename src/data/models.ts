@@ -1,10 +1,16 @@
+export enum TownType {
+    Outside = 1,
+    Hospital = 2,
+    Other = 13,
+    Common = 99
+}
 
 export type Town = {
     name: string,
     province: string,
     code: string,
     otherNames?: string[],
-    isHospital?: boolean
+    townType: TownType
 };
 
 export type Route = {
