@@ -45,5 +45,10 @@
     "source-map-support": "^0.5.6",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inigo001/bizkaibus-service.git"
+  },
+  "private": false
 }

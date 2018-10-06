@@ -1,8 +1,8 @@
 # BizkaibusService
 
-Prueba de concepto API **Bizkaibus**. Todavía inútil y muy poco funcional.
+Prueba de concepto para pasar los servicios de la API de **Bizkaibus** a algo manejable con Javascript. Todavía inútil y muy poco funcional, probablemente de manera perpetua.
 
-Métodos disponibles por el momento:
+## Métodos disponibles
 
 * `getFromTo`
 * `getHorario`
@@ -10,5 +10,11 @@ Métodos disponibles por el momento:
 * `getItinerario`
 * `getParadasTown`
 * `getPasoParada`
+* `getLineInfo`
+* `getVehicles`
+* `getLines`
+* `getBusInfo`
+
+## Cambios
 
 A la espera de ponerlo todo un poco más bonito.

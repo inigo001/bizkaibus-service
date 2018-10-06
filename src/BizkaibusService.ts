@@ -6,7 +6,8 @@ import {
     Parada,
     PasoTime,
     Horario,
-    VehiclePosition
+    VehiclePosition,
+    Vehicle
 } from '@data/models';
 
 import {
@@ -18,7 +19,8 @@ import {
     GetParadasTown,
     GetPasoParada,
     GetInfoLineas,
-    GetLineas
+    GetLineas,
+    GetBusInfo
 } from './services/petitions/index';
 import { PetitionBase } from '@services/petitions/_PetitionBase';
 
@@ -31,7 +33,8 @@ type Services = {
     paradasTown: GetParadasTown,
     pasoParada: GetPasoParada,
     getInfoLineas: GetInfoLineas
-    getLineas: GetLineas
+    getLineas: GetLineas,
+    getBusInfo: GetBusInfo
 };
 
 type Options = {
@@ -62,6 +65,7 @@ class BizkaibusService {
             itinerariosLinea: new ItinerariosLinea(this.towns),
             getInfoLineas: new GetInfoLineas(),
             getLineas: new GetLineas(),
+            getBusInfo: new GetBusInfo(),
         };
 
         if (options) {
@@ -194,6 +198,15 @@ class BizkaibusService {
      */
     public async getLines(): Promise<Line[]> {
         return this.services.getLineas.petition();
+    }
+
+    /**
+     * @param {VehiclePosition} vehiclePosition
+     * @returns {Promise<Vehicle>}
+     * @memberof BizkaibusService
+     */
+    public async getBusInfo(vehiclePosition: VehiclePosition): Promise<Vehicle> {
+        return this.services.getBusInfo.petition(vehiclePosition);
     }
 
 }

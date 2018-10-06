@@ -4,6 +4,7 @@ const transportRoute = 'http://arcgis.bizkaia.net/arcgis/rest/services/TRANSPORT
 
 export const ROUTES = {
     getTowns: baseRoute + 'gfReturn_Consultar_FamiliasCentros',
+    getLineas: baseRoute + 'gfReturn_Consultar_TBBB_Itinerario',
 
     estoyEnVoyA: baseRoute + 'gfConsulta_EstoyenVoya',
     getHorario: baseRoute + 'GetHorario',
@@ -13,7 +14,7 @@ export const ROUTES = {
     itinerariosLinea: baseRoute + 'gfReturn_Buscar_ItinerariosLinea',
     getPasoParada: baseRoute + 'GetPasoParada',
     getPasoParadaMobile: baseRoute + 'GetPasoParadaMobile',
-    getLineas: baseRoute + 'gfReturn_Consultar_TBBB_Itinerario',
+    getBusInfo: baseRoute + 'gfReturn_InformacionBus',
 
     pdf: dataRoute + 'ITINERARIOS/',
 

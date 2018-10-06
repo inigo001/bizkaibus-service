@@ -79,3 +79,17 @@ export type Position = {
     lat: number,
     lon: number
 };
+
+export type Vehicle = {
+    code: number,
+    clase: string,
+    tipo: number,
+    plazas: {
+        total: number,
+        sentado: number,
+        pie: number,
+        reservadas: number
+    },
+    sueloBajo: boolean,
+    rampa: boolean
+};

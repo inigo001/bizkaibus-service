@@ -1,6 +1,6 @@
 import { PetitionBase } from './_PetitionBase';
 import { ROUTES } from '@data/routes';
-import { Line, RouteTime, Route, Horario } from '@data/models';
+import { Line, RouteTime, Horario } from '@data/models';
 
 type PetitionResponse = {
     HT_TEXTOI: string,
