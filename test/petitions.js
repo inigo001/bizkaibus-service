@@ -1,33 +1,87 @@
-const chai = require('chai');
-const expect = chai.expect;
-
+const expect = require('chai').expect;
 const BizkaibusService = require('../dist/BizkaibusService').default;
 const TOWNS = require('../dist/data/towns').TOWNS;
 
 describe('Petitions', function () {
 
   const BBService = new BizkaibusService();
-  const paradas = [];
+  let error;
 
   describe('GetParadasTown', () => {
-    const MAX_TRIES = 5;
-    let tries = 0;
+    const randomTown = getRandomElement(TOWNS).name;
 
-    while (tries < MAX_TRIES) {
-      const randomTown = getRandomElement(TOWNS).name;
+    it(`Return an array for town: ${randomTown}`, done => {
 
-      it(`Return an array for town: ${randomTown}`, done => {
+      BBService.getParadasTown(randomTown)
+        .then(result => expect(result).to.be.an('array').length.is.at.least(1))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });
+  });
 
-        BBService.getParadasTown(randomTown).then(result => {
-          paradas.push(getRandomElement(result));
+  describe('GetFromTo', () => {
+    const randomTown1 = getRandomElement(TOWNS).name;
+    const randomTown2 = getRandomElement(TOWNS).name;
+    let error;
 
-          expect(result).to.be.an('array').length.is.at.least(1);
-        }).finally(done);
+    it(`Return an array from ${randomTown1} to ${randomTown2}`, done => {
 
-      });
+      BBService.getFromTo(randomTown1, randomTown2)
+        .then(result => expect(result).to.be.an('array'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
 
-      tries++;
-    }
+    });
+  });
+
+  describe('GetHorario', () => {
+
+    let error;
+
+    it(`Return Horario for line A3911`, done => {
+
+      BBService.getHorario('3911')
+        .then(result => expect(result).to.be.an('object'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });
+  });
+
+  describe('GetInfoLineas', () => {
+
+    let error;
+
+    it(`Return Info for line A3911`, done => {
+
+      BBService.getLineInfo('3911')
+        .then(result => expect(result).to.be.an('object'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });
   });
 
 });

@@ -6,16 +6,16 @@ import { ERROR } from '@data/errors';
 
 export abstract class PetitionBase {
 
-    protected TIMEOUT: number = 20000;
+    protected timeout: number = 20000;
 
-    protected sendRequest(route: string, data: object) {
+    protected sendRequest(route: string, data: object): Promise<any> {
 
         return request.get({
             url: route,
             qs: data,
             resolveWithFullResponse: true,
             qsStringifyOptions: { encode: false },
-            timeout: this.TIMEOUT,
+            timeout: this.timeout,
         })
             .then((response: Response) => {
                 if (response.statusCode === 200) {
@@ -49,14 +49,14 @@ export abstract class PetitionBase {
         });
     }
 
-    protected padZeroes(changeNumber) {
+    protected padZeroes(changeNumber: string): string {
         const zeroString = '0000';
         const paddedNum = zeroString.substring(changeNumber.length, 3) + changeNumber;
 
         return paddedNum;
     }
 
-    protected formatLineString(line: string | Line) {
+    protected formatLineString(line: string | Line): string {
 
         let formattedLine: string = '';
 
@@ -69,8 +69,12 @@ export abstract class PetitionBase {
         return formattedLine;
     }
 
-    protected utmToLatLong(xCoord, yCoord) {
+    protected utmToLatLong(xCoord: number, yCoord: number) {
         return this.utm2LL(xCoord, yCoord, 30);
+    }
+
+    public updateTimeout(timeout: number): void {
+        this.timeout = timeout;
     }
 
     // PRIVADAS
@@ -90,10 +94,10 @@ export abstract class PetitionBase {
      * @param {number} easting
      * @param {number} northing
      * @param {number} utmZone
-     * @returns
+     * @returns {number}
      * @memberof PetitionBase
      */
-    private utm2LL(easting: number, northing: number, utmZone: number) {
+    private utm2LL(easting: number, northing: number, utmZone: number): number[] {
         const DatumEqRad: number[] = [
             6378137.0, 6378137.0, 6378137.0, 6378135.0, 6378160.0, 6378245.0, 6378206.4,
             6378388.0, 6378388.0, 6378249.1, 6378206.4, 6377563.4, 6377397.2, 6377276.3

@@ -1,5 +1,13 @@
 import { Towns } from './services/Towns';
-import { Line, Town, Route, Parada, PasoTime, Horario, VehiclePosition } from 'data/models';
+import {
+    Line,
+    Town,
+    Route,
+    Parada,
+    PasoTime,
+    Horario,
+    VehiclePosition
+} from '@data/models';
 
 import {
     EstoyEnVoyA,
@@ -11,19 +19,23 @@ import {
     GetPasoParada,
     GetInfoLineas
 } from './services/petitions/index';
+import { PetitionBase } from '@services/petitions/_PetitionBase';
+
+type Services = {
+    horario: GetHorario,
+    estoyEnVoyA: EstoyEnVoyA,
+    vehiculos: GetVehiculos,
+    pdf: Pdf,
+    itinerariosLinea: ItinerariosLinea,
+    paradasTown: GetParadasTown,
+    pasoParada: GetPasoParada,
+    getInfoLineas: GetInfoLineas
+};
 
 export default class BizkaibusService {
 
     private towns: Towns;
-
-    public horario: GetHorario;
-    public estoyEnVoyA: EstoyEnVoyA;
-    public vehiculos: GetVehiculos;
-    public pdf: Pdf;
-    public itinerariosLinea: ItinerariosLinea;
-    public paradasTown: GetParadasTown;
-    public pasoParada: GetPasoParada;
-    public getInfoLineas: GetInfoLineas;
+    private services: Services;
 
     /**
      * Crea una instancia de BizkaibusService
@@ -33,14 +45,16 @@ export default class BizkaibusService {
     constructor() {
         this.towns = new Towns();
 
-        this.horario = new GetHorario();
-        this.estoyEnVoyA = new EstoyEnVoyA();
-        this.vehiculos = new GetVehiculos();
-        this.pdf = new Pdf();
-        this.paradasTown = new GetParadasTown();
-        this.pasoParada = new GetPasoParada();
-        this.itinerariosLinea = new ItinerariosLinea(this.towns);
-        this.getInfoLineas = new GetInfoLineas();
+        this.services = {
+            horario: new GetHorario(),
+            estoyEnVoyA: new EstoyEnVoyA(),
+            vehiculos: new GetVehiculos(),
+            pdf: new Pdf(),
+            paradasTown: new GetParadasTown(),
+            pasoParada: new GetPasoParada(),
+            itinerariosLinea: new ItinerariosLinea(this.towns),
+            getInfoLineas: new GetInfoLineas()
+        };
     }
 
     /**
@@ -49,6 +63,14 @@ export default class BizkaibusService {
      */
     public async updateTowns() {
         return this.towns.updateTowns();
+    }
+
+    public async changeTimeout(timeout: number) {
+        for (const key in this.services) {
+            if (this.services[key]) {
+                this.services[key].updateTimeout(timeout);
+            }
+        }
     }
 
     /**
@@ -65,7 +87,7 @@ export default class BizkaibusService {
         if (!origin && !destination) {
             return Promise.reject('NO_TOWN');
         } else {
-            return this.estoyEnVoyA.petition(origin, destination);
+            return this.services.estoyEnVoyA.petition(origin, destination);
         }
     }
 
@@ -76,7 +98,7 @@ export default class BizkaibusService {
      * @memberof BizkaibusService
      */
     public async getHorario(line: string | Line, date?: Date): Promise<Horario> {
-        return this.horario.petition(line, date);
+        return this.services.horario.petition(line, date);
     }
 
     /**
@@ -87,7 +109,7 @@ export default class BizkaibusService {
      * @memberof BizkaibusService
      */
     public async getPdf(line: string | Line, direction?: 'I' | 'V') {
-        return this.pdf.petition(line, direction);
+        return this.services.pdf.petition(line, direction);
     }
 
     /**
@@ -98,7 +120,7 @@ export default class BizkaibusService {
      * @memberof BizkaibusService
      */
     public async getItinerario(linea: Line, route: Route): Promise<Parada[]> {
-        return this.itinerariosLinea.petition(linea, route);
+        return this.services.itinerariosLinea.petition(linea, route);
     }
 
     /**
@@ -113,7 +135,7 @@ export default class BizkaibusService {
         if (!searchTown) {
             return Promise.reject('NO_TOWN');
         } else {
-            return this.paradasTown.petition(searchTown);
+            return this.services.paradasTown.petition(searchTown);
         }
     }
 
@@ -123,7 +145,7 @@ export default class BizkaibusService {
      * @memberof BizkaibusService
      */
     public async getPasoParada(parada: Parada): Promise<PasoTime[]> {
-        return this.pasoParada.petition(parada);
+        return this.services.pasoParada.petition(parada);
     }
 
     /**
@@ -132,7 +154,7 @@ export default class BizkaibusService {
      * @memberof BizkaibusService
      */
     public async getLineInfo(line: string): Promise<Line> {
-        return this.getInfoLineas.petition(line);
+        return this.services.getInfoLineas.petition(line);
     }
 
     /**
@@ -141,7 +163,7 @@ export default class BizkaibusService {
      * @memberof BizkaibusService
      */
     public async getVehicles(line: string | Line): Promise<VehiclePosition[]> {
-        return this.vehiculos.petition(line);
+        return this.services.vehiculos.petition(line);
     }
 
 }

@@ -14,7 +14,7 @@ export class Pdf extends PetitionBase {
         return request.get({
             url: ROUTES.pdf + lineString,
             resolveWithFullResponse: true,
-            timeout: this.TIMEOUT,
+            timeout: this.timeout,
         }).then((response: Response) => this.processData(response));
     }
 

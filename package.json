@@ -1,14 +1,15 @@
 {
   "name": "bizkaibus-service",
   "version": "0.0.1",
-  "description": "Pruebas con la API de Bizkaibus",
+  "description": "Pruebas para convertir los servicios de Bizkaibus en un módulo de Node",
   "main": "dist/BizkaibusService.js",
   "scripts": {
     "build": "rm -rf dist && npx gulp build",
     "pretest": "npm run build",
     "test": "npx mocha",
     "start": "npm run build && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./dist/main.js",
-    "trials": "npm run build && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./trials/test.js "
+    "prepublish": "npm run build && npm test",
+    "trials": "npm run build && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./trials/test.js"
   },
   "files": [
     "dist"
@@ -20,7 +21,7 @@
     "bizkaia"
   ],
   "author": "inigo001",
-  "license": "ISC",
+  "license": "EUPL",
   "dependencies": {
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
