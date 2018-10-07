@@ -1,5 +1,4 @@
-import * as request from 'request-promise-native';
-import { Response } from 'request';
+import Axios, { AxiosResponse } from 'axios';
 
 import { PetitionBase } from './_PetitionBase';
 import { Line } from '@data/models';
@@ -11,16 +10,16 @@ export class Pdf extends PetitionBase {
 
         const lineString: string = `${this.formatLineString(line)}${direction.toLowerCase()}.pdf`;
 
-        return request.get({
+        return Axios({
+            method: 'get',
             url: ROUTES.pdf + lineString,
-            resolveWithFullResponse: true,
             timeout: this.timeout,
-        }).then((response: Response) => this.processData(response));
+        }).then((response: AxiosResponse) => this.processData(response));
     }
 
-    private processData(response: Response) {
-        if (response.statusCode === 200 && response.headers['content-type'] === 'application/pdf') {
-            return Promise.resolve(response.body);
+    private processData(response: AxiosResponse) {
+        if (response.status === 200 && response.headers['content-type'] === 'application/pdf') {
+            return Promise.resolve(response.data);
         } else {
             return Promise.reject('ERROR');
         }

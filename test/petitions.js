@@ -111,6 +111,39 @@ describe('Petitions', function () {
     });
   });
 
+  describe('GetVehiculos', () => {
+
+    let error;
+
+    it(`Return Vehicles for line 3911`, done => {
+
+      BBService.getVehicles('3911')
+        .then(result => expect(result).to.be.an('array'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });
+
+    it(`Return Vehicles for line A3632`, done => {
+
+      BBService.getVehicles('3632')
+        .then(result => expect(result).to.be.an('array'))
+        .catch(err => error = err)
+        .finally(() => {
+          if (error) {
+            return done(new Error(error));
+          } else {
+            return done();
+          }
+        });
+    });
+  });
+
 });
 
 

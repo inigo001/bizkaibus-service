@@ -22,6 +22,7 @@ import {
     GetLineas,
     GetBusInfo
 } from './services/petitions/index';
+
 import { PetitionBase } from '@services/petitions/_PetitionBase';
 
 type Services = {
@@ -38,7 +39,6 @@ type Services = {
 };
 
 type Options = {
-    method?: 'GET' | 'POST',
     timeout?: number
 };
 
@@ -70,7 +70,6 @@ class BizkaibusService {
 
         if (options) {
             this.changeTimeout(options.timeout);
-            this.changeMethod(options.method);
         }
     }
 
@@ -88,15 +87,6 @@ class BizkaibusService {
                 (this.services[key] as PetitionBase).updateTimeout(timeout);
             }
         }
-    }
-
-    public async changeMethod(method: 'GET' | 'POST') {
-        for (const key in this.services) {
-            if (this.services[key]) {
-                (this.services[key] as PetitionBase).changeMethod(method);
-            }
-        }
-
     }
 
     /**

@@ -1,13 +1,17 @@
-import * as request from 'request-promise-native';
-import { Response } from 'request';
-import { parseString } from 'xml2js';
+import { parseString } from 'xml2js-parser';
+import Axios, { AxiosResponse } from 'axios';
+
 import { Line } from '@data/models';
 import { ERROR } from '@data/errors';
 
 export abstract class PetitionBase {
 
+    private USER_AGENT =
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X)' +
+        'AppleWebKit/602.1.50 (KHTML, like Gecko)' +
+        'CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1';
+
     protected timeout: number = 20000;
-    protected petitionMethod: 'GET' | 'POST' = 'GET';
 
     public updateTimeout(timeout: number): void {
         if (timeout) {
@@ -15,55 +19,39 @@ export abstract class PetitionBase {
         }
     }
 
-    public changeMethod(method: 'GET' | 'POST') {
-        if (method) {
-            this.petitionMethod = method;
-        }
-    }
-
     protected sendRequest(route: string, data: object): Promise<any> {
 
         return this.internalPetition(route, data)
-            .then((response: Response) => {
-                if (response.statusCode === 200) {
+            .then((response: AxiosResponse) => {
+                if (response.status === 200) {
                     if (response.headers['content-type'] === 'text/xml; charset=utf-8') {
-                        return this.processXml(response.body);
+
+                        return this.processXml(response.data);
                     } else {
                         try {
-                            const jsonResponse = JSON.parse(response.body);
-                            return Promise.resolve(jsonResponse);
+                            return Promise.resolve(response.data);
                         } catch (error) {
                             return Promise.reject(ERROR[3]);
                         }
                     }
                 } else {
-                    return Promise.reject(`${ERROR[1]} - ${response.url}`);
+                    return Promise.reject(`${ERROR[1]}`);
                 }
             });
     }
 
     private internalPetition(route, data) {
 
-        if (this.petitionMethod === 'GET') {
+        return Axios({
+            method: 'get',
+            url: route,
+            params: data,
+            timeout: this.timeout,
+            headers: {
+                'User-Agent': this.USER_AGENT
+            }
+        });
 
-            return request.get({
-                url: route,
-                qs: data,
-                resolveWithFullResponse: true,
-                qsStringifyOptions: { encode: false },
-                timeout: this.timeout,
-            });
-
-        } else {
-
-            return request.post({
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                resolveWithFullResponse: true,
-                url: route,
-                form: data
-            });
-
-        }
     }
 
     protected parseXml(xml: string): Promise<any> {
