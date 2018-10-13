@@ -8,7 +8,7 @@ import {
     Horario,
     VehiclePosition,
     Vehicle
-} from '@data/models';
+} from './data/models';
 
 import {
     EstoyEnVoyA,
@@ -23,7 +23,7 @@ import {
     GetBusInfo
 } from './services/petitions/index';
 
-import { PetitionBase } from '@services/petitions/_PetitionBase';
+import { PetitionBase } from './services/petitions/_PetitionBase';
 
 type Services = {
     horario: GetHorario,
