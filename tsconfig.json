@@ -14,6 +14,9 @@
     "alwaysStrict": true,
     "moduleResolution": "node",
     "pretty": true,
+    "plugins": [{
+      "transform": "@zerollup/ts-transform-paths"
+    }]
   },
   "files": [
     "./node_modules/@types/node/index.d.ts"

@@ -4,7 +4,7 @@
   "description": "Pruebas para convertir los servicios de Bizkaibus en un módulo de Node",
   "main": "dist/BizkaibusService.js",
   "scripts": {
-    "build": "rm -rf dist && npx gulp build",
+    "build": "rm -rf dist && npx ttsc",
     "pretest": "npm run build",
     "test": "npx mocha",
     "start": "npm run build && node --icu-data-dir=node_modules/full-icu -r source-map-support/register ./dist/main.js",
@@ -33,15 +33,13 @@
     "@types/axios": "^0.14.0",
     "@types/node": "^10.3.3",
     "@types/xml2js": "^0.4.3",
+    "@zerollup/ts-transform-paths": "^1.5.1",
     "chai": "^4.1.2",
     "full-icu": "^1.2.1",
-    "gulp": "^4.0.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-typescript": "^5.0.0-alpha.3",
-    "gulp-typescript-path-resolver": "0.0.1-c",
     "mocha": "^5.2.0",
     "source-map-support": "^0.5.6",
     "tslint": "^5.11.0",
+    "ttypescript": "^1.5.5",
     "typescript": "^2.9.2"
   },
   "repository": {
