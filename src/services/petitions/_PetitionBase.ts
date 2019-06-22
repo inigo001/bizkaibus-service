@@ -57,7 +57,15 @@ export abstract class PetitionBase {
     protected parseXml(xml: string): Promise<any> {
 
         return new Promise((resolve, reject) => {
-            parseString(xml, (error, result) => {
+
+            // Sin estas opciones, en caso de ser
+            // un listado vacío daría error
+            const OPTIONS = {
+                normalize: true
+            };
+
+            parseString(xml, OPTIONS, (error, result) => {
+
                 if (error) {
                     reject(ERROR[2]);
                 } else {
