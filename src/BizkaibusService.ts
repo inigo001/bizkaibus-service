@@ -73,14 +73,6 @@ class BizkaibusService {
         }
     }
 
-    /**
-     * @returns
-     * @memberof BizkaibusService
-     */
-    public async updateTowns() {
-        return this.towns.updateTowns();
-    }
-
     public async changeTimeout(timeout: number) {
         for (const key in this.services) {
             if (this.services[key]) {
@@ -199,8 +191,22 @@ class BizkaibusService {
         return this.services.getBusInfo.petition(vehiclePosition);
     }
 
+    /**
+     * Devuelve el listado de pueblos guardado en el servicio
+     * En caso de necesitar actualizarlos llamar al método updateTowns
+     * @returns {Promise<Town[]>}
+     * @memberof BizkaibusService
+     */
     public async getTowns(): Promise<Town[]> {
         return this.towns.getTowns();
+    }
+
+    /**
+     * @returns
+     * @memberof BizkaibusService
+     */
+    public async updateTowns() {
+        return this.towns.updateTowns();
     }
 
 }

@@ -11,16 +11,6 @@ describe('Single Petitions', () => {
 
     it(`Return an array for town: ${randomTown}`, async () => {
       const result = await BBService.getParadasTown(randomTown);
-      expect(result).to.be.an('array').length.is.at.least(1);
-    });
-  });
-
-  describe('GetFromTo', () => {
-    const randomTown1 = getRandomElement(TOWNS).name;
-    const randomTown2 = getRandomElement(TOWNS).name;
-
-    it(`Return an array from ${randomTown1} to ${randomTown2}`, async () => {
-      const result = await BBService.getFromTo(randomTown1, randomTown2);
       expect(result).to.be.an('array');
     });
   });
@@ -63,6 +53,16 @@ describe('Single Petitions', () => {
       const result = await BBService.getVehicles('3632');
       expect(result).to.be.an('array')
     });
+  });
+
+
+  describe('GetTowns', () => {
+
+    it(`Towns is an array with length 134`, async () => {
+      const result = await BBService.updateTowns().then(() => BBService.getTowns());
+      expect(result).to.be.an('array').of.length(134)
+    });
+
   });
 
 });

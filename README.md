@@ -14,7 +14,4 @@ Prueba de concepto para pasar los servicios de la API de **Bizkaibus** a algo ma
 * `getVehicles`
 * `getLines`
 * `getBusInfo`
-
-## Cambios
-
-A la espera de ponerlo todo un poco más bonito.
+* `getTowns`
