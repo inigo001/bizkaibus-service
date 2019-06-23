@@ -29,26 +29,24 @@ export class GetBusInfo extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.getBusInfo, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response.Consulta.Registro));
     }
 
-    private processData(registros: any[]) {
-
-        const data: PetitionResponse = registros[0]['$'];
+    private processData(registro: PetitionResponse) {
 
         const vehicle: Vehicle = {
-            code: parseInt(data.FL_NUMSAE, 10),
-            clase: data.FL_CLASE,
-            tipo: parseInt(data.FL_TIPO, 10),
+            code: parseInt(registro.FL_NUMSAE, 10),
+            clase: registro.FL_CLASE,
+            tipo: parseInt(registro.FL_TIPO, 10),
             plazas: {
-                total: parseInt(data.FL_NPLTOT, 10),
-                sentado: parseInt(data.FL_NPLSEN, 10),
-                pie: parseInt(data.FL_NPLPIE, 10),
-                reservadas: parseInt(data.FL_NPLASR.replace(/\D/g, ''), 10)
+                total: parseInt(registro.FL_NPLTOT, 10),
+                sentado: parseInt(registro.FL_NPLSEN, 10),
+                pie: parseInt(registro.FL_NPLPIE, 10),
+                reservadas: parseInt(registro.FL_NPLASR.replace(/\D/g, ''), 10)
             },
-            sueloBajo: (data.FL_SUELO === 'SB'),
-            rampa: (data.FL_RAMPLA === 'RA')
+            sueloBajo: (registro.FL_SUELO === 'SB'),
+            rampa: (registro.FL_RAMPLA === 'RA')
         };
 
         return vehicle;

@@ -7,14 +7,11 @@ type PetitionResponse = {
     LN_DENOMI: string,
     IR_SENTDO: string,
     CT_PARZON: string,
-    CT_CLTRFA: string,
     IR_TIPORU: string,
     IR_NMRORU: string,
+    RL_CATEGO: string,
     LN_INCCAS: string,
     LN_INCEUS: string,
-    RL_DENOMI: string,
-    ORDEN: string,
-    VVMONTESHIERRO: string
 };
 
 export class GetInfoLineas extends PetitionBase {
@@ -29,39 +26,36 @@ export class GetInfoLineas extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.lineasWeb, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response.Consulta.Registro));
     }
 
-    private processData(registros: any[]) {
+    private processData(registros: PetitionResponse[]) {
 
         const lines: Line[] = [];
 
         for (const registro of registros) {
-            const cleanRegistro: PetitionResponse = registro['$'];
-            const line: Line = lines.find(linename => linename.code === cleanRegistro.LN_CLINEA);
+
+            const line: Line = lines.find(linename => linename.code === registro.LN_CLINEA);
 
             const route: Route = {
-                direction: cleanRegistro.IR_SENTDO,
-                zone: cleanRegistro.CT_PARZON,
-                rate: cleanRegistro.CT_CLTRFA,
-                type: cleanRegistro.IR_TIPORU,
-                number: cleanRegistro.IR_NMRORU,
+                direction: registro.IR_SENTDO,
+                zone: registro.CT_PARZON,
+                type: registro.IR_TIPORU,
+                number: registro.IR_NMRORU,
                 incidents: {
-                    es: cleanRegistro.LN_INCCAS,
-                    eu: cleanRegistro.LN_INCEUS
+                    es: registro.LN_INCCAS,
+                    eu: registro.LN_INCEUS
                 },
-                name: cleanRegistro.RL_DENOMI,
-                order: cleanRegistro.ORDEN,
-                montesHierro: cleanRegistro.VVMONTESHIERRO,
+                name: registro.LN_DENOMI,
             };
 
             if (line) {
                 line.routes.push(route);
             } else {
                 const newLine: Line = {
-                    code: cleanRegistro.LN_CLINEA,
-                    name: cleanRegistro.LN_DENOMI,
+                    code: registro.LN_CLINEA,
+                    name: registro.LN_DENOMI,
                     routes: [route]
                 };
 

@@ -24,20 +24,19 @@ export class GetLineas extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.getLineas, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response.Consulta.Registro));
     }
 
-    private processData(registros: any[]) {
+    private processData(registros: PetitionResponse[]) {
 
         const lines: Line[] = [];
 
         for (const registro of registros) {
-            const cleanRegistro: PetitionResponse = registro['$'];
 
             const line: Line = {
-                code: cleanRegistro.IR_CLINEA,
-                name: cleanRegistro.RL_DENOMI,
+                code: registro.IR_CLINEA,
+                name: registro.RL_DENOMI,
                 routes: []
             };
 

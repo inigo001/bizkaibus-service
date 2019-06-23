@@ -54,7 +54,7 @@ export class ItinerariosLinea extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.itinerariosLinea, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => this.parseXml(response.string))
             .then(response => this.processData(response));
     }
 

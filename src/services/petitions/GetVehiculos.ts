@@ -3,17 +3,17 @@ import { ROUTES } from '@data/routes';
 import { Line, VehiclePosition } from 'data/models';
 
 type PetitionResponse = {
-    vehiculo: string[],
-    linea: string[],
-    sublinea: string[],
-    coche: string[],
-    serv_bus: string[],
-    conductor: string[],
-    serv_cond: string[],
-    estado: string[],
-    estadoLocReal: string[],
-    xcoord: string[],
-    ycoord: string[]
+    vehiculo: string,
+    linea: string,
+    sublinea: string,
+    coche: string,
+    serv_bus: string,
+    conductor: string,
+    serv_cond: string,
+    estado: string,
+    estadoLocReal: string,
+    xcoord: string,
+    ycoord: string
 };
 
 export class GetVehiculos extends PetitionBase {
@@ -25,7 +25,7 @@ export class GetVehiculos extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.getVehiculos, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response));
     }
 
@@ -39,15 +39,14 @@ export class GetVehiculos extends PetitionBase {
         const vehiclePositions: VehiclePosition[] = [];
 
         for (const vehiculo of vehiculos) {
-
-            const latLong = this.utmToLatLong(parseFloat(vehiculo.xcoord[0]), parseFloat(vehiculo.ycoord[0]));
+            const latLong = this.utmToLatLong(parseFloat(vehiculo.xcoord), parseFloat(vehiculo.ycoord));
 
             const vehiclePosition: VehiclePosition = {
-                vehicle: vehiculo.vehiculo[0],
+                vehicle: vehiculo.vehiculo,
                 position: { lat: latLong[0], lon: latLong[1] },
-                line: vehiculo.linea[0],
-                subLine: vehiculo.sublinea[0],
-                busServer: vehiculo.serv_bus[0]
+                line: vehiculo.linea,
+                subLine: vehiculo.sublinea,
+                busServer: vehiculo.serv_bus
             };
 
             vehiclePositions.push(vehiclePosition);

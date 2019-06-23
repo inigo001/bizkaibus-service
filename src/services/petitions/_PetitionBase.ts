@@ -1,4 +1,5 @@
-import { parseString } from 'xml2js-parser';
+import { parse, validate } from 'fast-xml-parser';
+
 import Axios, { AxiosResponse } from 'axios';
 
 import { Line } from '@data/models';
@@ -25,8 +26,7 @@ export abstract class PetitionBase {
             .then((response: AxiosResponse) => {
                 if (response.status === 200) {
                     if (response.headers['content-type'] === 'text/xml; charset=utf-8') {
-
-                        return this.processXml(response.data);
+                        return this.processXml(this.cleanTextXML(response.data));
                     } else {
                         try {
                             return Promise.resolve(response.data);
@@ -57,22 +57,16 @@ export abstract class PetitionBase {
     protected parseXml(xml: string): Promise<any> {
 
         return new Promise((resolve, reject) => {
-
             // Sin estas opciones, en caso de ser
             // un listado vacío daría error
-            const OPTIONS = {
-                normalize: true
-            };
 
-            parseString(xml, OPTIONS, (error, result) => {
+            const IS_VALID = validate(xml);
 
-                if (error) {
-                    reject(ERROR[2]);
-                } else {
-                    resolve(result);
-                }
-            });
-
+            if (IS_VALID === true) {
+                resolve(parse(xml, { ignoreAttributes: false, attributeNamePrefix: '', }));
+            } else {
+                reject(ERROR[2]);
+            }
         });
     }
 
@@ -172,6 +166,24 @@ export abstract class PetitionBase {
             / Math.cos(phi1);
 
         return [(phi / drad), (zcm + lon / drad)];
+    }
+
+    /**
+     * {@link https://stackoverflow.com/questions/1248849/converting-sanitised-html-back-to-displayable-html}
+     * @private
+     * @param {string} text
+     * @returns {string}
+     * @memberof PetitionBase
+     */
+    private cleanTextXML(text: string): string {
+
+        let ret = text.replace(/&gt;/g, '>');
+        ret = ret.replace(/&lt;/g, '<');
+        ret = ret.replace(/&quot;/g, '"');
+        ret = ret.replace(/&apos;/g, "'");
+        ret = ret.replace(/&amp;/g, '&');
+
+        return ret;
     }
 
 }

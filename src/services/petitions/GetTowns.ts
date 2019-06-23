@@ -19,7 +19,7 @@ export class GetTowns extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.getTowns, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response.Consulta.Registro));
     }
 
@@ -31,7 +31,7 @@ export class GetTowns extends PetitionBase {
 
             for (const listPart of list['Registro']) {
 
-                const registryTown: PetitionResponse = listPart['$'];
+                const registryTown: PetitionResponse = listPart;
 
                 const newTown: Town = {
                     name: registryTown.label.replace(/\((.*?)\)/, '').trim(),

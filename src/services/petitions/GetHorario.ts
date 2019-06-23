@@ -32,20 +32,19 @@ export class GetHorario extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.getHorario, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response.Consulta.Registro));
     }
 
-    private processData(registros: any) {
+    private processData(registros: PetitionResponse[]) {
 
         let horario: Horario;
 
-        for (const res of registros) {
-            const response: PetitionResponse = res['$'];
+        for (const registro of registros) {
 
             horario = {
-                ida: this.formatTimetable(response.HT_TEXTOIC),
-                vuelta: this.formatTimetable(response.HT_TEXTOVC)
+                ida: this.formatTimetable(registro.HT_TEXTOIC),
+                vuelta: this.formatTimetable(registro.HT_TEXTOVC)
             };
         }
 

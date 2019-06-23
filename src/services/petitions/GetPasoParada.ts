@@ -29,7 +29,7 @@ export class GetPasoParada extends PetitionBase {
         };
 
         return this.sendRequest(ROUTES.getPasoParada, data)
-            .then(response => this.parseXml(response.string['_']))
+            .then(response => response.string)
             .then(response => this.processData(response));
 
     }

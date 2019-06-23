@@ -16,13 +16,13 @@ export type Town = {
 export type Route = {
     direction: 'I' | 'V' | string,
     zone: string,
-    rate: string,
+    // rate: string,
     type: string,
     number: string,
     incidents: { es: string, eu: string },
     name: string,
-    order: string | number,
-    montesHierro: string
+    // order: string | number,
+    // montesHierro: string
 };
 
 export type Line = {
