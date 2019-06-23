@@ -199,6 +199,10 @@ class BizkaibusService {
         return this.services.getBusInfo.petition(vehiclePosition);
     }
 
+    public async getTowns(): Promise<Town[]> {
+        return this.towns.getTowns();
+    }
+
 }
 
 export = BizkaibusService;

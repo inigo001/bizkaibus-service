@@ -35,7 +35,7 @@ export class GetVehiculos extends PetitionBase {
             return [];
         }
 
-        const vehiculos: PetitionResponse[] = response.Consulta.InfoVehiculo;
+        const vehiculos: PetitionResponse[] = this.dataToArray(response.Consulta.InfoVehiculo);
         const vehiclePositions: VehiclePosition[] = [];
 
         for (const vehiculo of vehiculos) {

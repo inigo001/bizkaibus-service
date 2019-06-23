@@ -96,6 +96,18 @@ export abstract class PetitionBase {
         return this.utm2LL(xCoord, yCoord, 30);
     }
 
+    protected dataToArray(data: string | any[] | object): any[] {
+        let finalArray: any[] = [];
+
+        if (Array.isArray(data)) {
+            finalArray = finalArray.concat(data);
+        } else if (typeof data === 'object') {
+            finalArray.push(data);
+        }
+
+        return finalArray;
+    }
+
     // PRIVADAS
 
     private processXml(xml: string): Promise<any> {

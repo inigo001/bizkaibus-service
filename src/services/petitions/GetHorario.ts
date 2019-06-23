@@ -36,11 +36,13 @@ export class GetHorario extends PetitionBase {
             .then(response => this.processData(response.Consulta.Registro));
     }
 
-    private processData(registros: PetitionResponse[]) {
+    private processData(registros: any) {
 
         let horario: Horario;
 
-        for (const registro of registros) {
+        const cleanedRegistros: PetitionResponse[] = this.dataToArray(registros);
+
+        for (const registro of cleanedRegistros) {
 
             horario = {
                 ida: this.formatTimetable(registro.HT_TEXTOIC),

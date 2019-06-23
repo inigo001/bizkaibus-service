@@ -36,17 +36,19 @@ export class EstoyEnVoyA extends PetitionBase {
 
         return this.sendRequest(ROUTES.estoyEnVoyA, data)
             .then(response => response.string)
-            .then(response => this.processData(response.Consulta.Registro));
+            .then(response => this.processData(response.Consulta));
     }
 
-    private processData(registros: PetitionResponse[]) {
-        if (!registros) {
+    private processData(res: any) {
+        if (!res) {
             return [];
         }
 
         const lines: Line[] = [];
 
-        for (const registro of registros) {
+        const builtRegistros: PetitionResponse[] = this.dataToArray(res.Registro);
+
+        for (const registro of builtRegistros) {
             const line: Line = lines.find(linename => linename.code === registro.LN_CLINEA);
 
             const route: Route = {

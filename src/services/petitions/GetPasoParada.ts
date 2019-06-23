@@ -3,18 +3,18 @@ import { Parada, PasoTime } from '@data/models';
 import { ROUTES } from '@data/routes';
 
 type PetitionResponse = {
-    linea: string[],
-    ruta: string[],
-    e1: Array<{
-        destino: string[],
-        metros: string[],
-        minutos: string[]
-    }>,
-    e2: Array<{
-        destino: string[],
-        metros: string[],
-        minutos: string[]
-    }>,
+    linea: string,
+    ruta: string,
+    e1: {
+        destino: string,
+        metros: number,
+        minutos: number
+    },
+    e2: {
+        destino: string,
+        metros: number,
+        minutos: number
+    },
 };
 
 export class GetPasoParada extends PetitionBase {
@@ -34,36 +34,44 @@ export class GetPasoParada extends PetitionBase {
 
     }
 
-    private processData(response) {
+    private processData(response: { GetPasoParadaResult: any }): PasoTime[] {
 
-        const pasosParada: PetitionResponse[] = response.GetPasoParadaResult.PasoParada;
+        const pasosParada: PetitionResponse[] = this.dataToArray(response.GetPasoParadaResult.PasoParada);
 
         const pasosTime: PasoTime[] = [];
 
         for (const pasoParada of pasosParada) {
 
-            const time1 = this.processTime(pasoParada.e1);
-            const time2 = (pasoParada.e2.length > 0) ? this.processTime(pasoParada.e2) : undefined;
+            const times = [this.processTime(pasoParada.e1), this.processTime(pasoParada.e2)].filter(e => e);
 
-            const pasoTime: PasoTime = {
-                lineCode: pasoParada.linea[0],
-                route: pasoParada.ruta[0],
-                times: [time1, time2]
-            };
+            if (times.length > 0) {
+                const pasoTime: PasoTime = {
+                    lineCode: pasoParada.linea,
+                    route: pasoParada.ruta,
+                    times
+                };
 
-            pasosTime.push(pasoTime);
+                pasosTime.push(pasoTime);
+            }
         }
 
         return pasosTime;
 
     }
 
-    private processTime(pasoParadaE) {
-        return {
-            destination: pasoParadaE[0].destino[0],
-            meters: parseInt(pasoParadaE[0].metros[0], 10),
-            minutes: parseInt(pasoParadaE[0].minutos[0], 10)
-        };
+    private processTime(pasoParadaE: { destino: any; metros: any; minutos: any; }) {
+
+        let timeInfo: { destination: any; meters: any; minutes: any; };
+
+        if (pasoParadaE.destino !== '') {
+            timeInfo = {
+                destination: pasoParadaE.destino,
+                meters: pasoParadaE.metros,
+                minutes: pasoParadaE.minutos
+            };
+        }
+
+        return timeInfo;
     }
 
 }
